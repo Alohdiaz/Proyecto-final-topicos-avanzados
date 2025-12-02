@@ -5,7 +5,7 @@ from app.db.base import Base
 class Part(Base):
     __tablename__ = "parts"
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(String, primary_key=True, index=True)
     serial = Column(String(50), unique=True, index=True, nullable=False)
     tipo_pieza = Column(String(50), nullable=False)
     lote = Column(String(50), nullable=True)

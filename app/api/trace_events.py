@@ -51,7 +51,7 @@ def create_trace_event(
 
 @router.get("/part/{part_id}", response_model=list[TraceEventOut])
 def list_trace_events_for_part(
-    part_id: int,
+    part_id: str,
     db: Session = Depends(get_db),
     current_user=Depends(require_supervisor_or_admin),
 ):

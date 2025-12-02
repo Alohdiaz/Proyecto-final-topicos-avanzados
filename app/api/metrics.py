@@ -4,7 +4,8 @@ from sqlalchemy.orm import Session
 from app.api import get_db
 from app.models.part import Part
 from app.models.trace_event import TraceEvent
-from app.core.roles import require_supervisor_or_admin  
+from app.core.roles import require_supervisor_or_admin 
+from datetime import datetime 
 
 router = APIRouter(prefix="/metrics", tags=["metrics"])
 
@@ -14,7 +15,7 @@ def parts_by_status(
     db: Session = Depends(get_db),
     current_user=Depends(require_supervisor_or_admin),  
 ):
-    rows = db.query(Part.status, func.count(Part.id)).group_by(Part.status).all()
+    rows = (db.query(Part.status, func.count(Part.id)).group_by(Part.status).all())
     return {status: count for status, count in rows}
 
 
@@ -25,6 +26,11 @@ def throughput(
     db: Session = Depends(get_db),
     current_user=Depends(require_supervisor_or_admin), 
 ):
+    try:
+        from_date_obj = datetime.strptime(from_date, "%Y-%m-%d").date()
+        to_date_obj = datetime.strptime(to_date, "%Y-%m-%d").date()
+    except:
+        return {"error": "Formato incorrecto. Usa YYYY-MM-DD."}
     # piezas OK por día (usando trace_events con resultado OK)
     rows = (
         db.query(

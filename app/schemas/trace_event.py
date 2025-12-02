@@ -2,7 +2,7 @@ from pydantic import BaseModel, ConfigDict
 from datetime import datetime
 
 class TraceEventBase(BaseModel):
-    part_id: int
+    part_id: str
     station_id: int
     operador_id: int | None = None
     resultado: str
