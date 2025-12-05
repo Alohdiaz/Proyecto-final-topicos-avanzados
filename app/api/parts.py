@@ -10,6 +10,7 @@ from app.core.roles import (
     require_operator_or_admin,
     require_admin,
 )
+from sqlalchemy import func
 
 router = APIRouter(prefix="/parts", tags=["parts"])
 
@@ -62,15 +63,22 @@ def list_parts(
     """
     query = db.query(Part)
 
+    # --- Filtro por status (normaliza a MAYÚSCULAS) ---
     if status:
-        query = query.filter(Part.status == status)
+        status_norm = status.strip().upper()
+        query = query.filter(func.upper(Part.status) == status_norm)
 
+    # --- Filtro por tipo_pieza (case-insensitive) ---
     if tipo_pieza:
-        query = query.filter(Part.tipo_pieza == tipo_pieza)
+        tipo_norm = tipo_pieza.strip().upper()
+        query = query.filter(func.upper(Part.tipo_pieza) == tipo_norm)
 
+    # --- Filtro por lote (case-insensitive) ---
     if lote:
-        query = query.filter(Part.lote == lote)
+        lote_norm = lote.strip().upper()
+        query = query.filter(func.upper(Part.lote) == lote_norm)
 
+    # --- Filtros por fechas ---
     if fecha_desde:
         query = query.filter(Part.fecha_creacion >= fecha_desde)
 
@@ -78,6 +86,7 @@ def list_parts(
         query = query.filter(Part.fecha_creacion <= fecha_hasta)
 
     return query.order_by(Part.id).all()
+
 
 
 # ------ OBTENER PIEZA POR ID (OPERATOR / SUPERVISOR / ADMIN) ------- #

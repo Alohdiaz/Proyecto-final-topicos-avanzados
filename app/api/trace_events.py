@@ -1,6 +1,7 @@
 # app/api/trace_events.py
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
+from sqlalchemy import func
 
 from app.db.session import get_db
 from app.models.trace_event import TraceEvent
@@ -11,9 +12,7 @@ from app.core.roles import require_user, require_supervisor_or_admin
 
 router = APIRouter(prefix="/trace-events", tags=["trace_events"])
 
-
 # --------- Crear evento de traza (OPERADOR / SUPERVISOR / ADMIN) ---------
-
 @router.post("/", response_model=TraceEventOut)
 def create_trace_event(
     event_in: TraceEventCreate,
@@ -35,12 +34,20 @@ def create_trace_event(
             detail="Estación no encontrada.",
         )
 
-    event = TraceEvent(**event_in.model_dump())
-    db.add(event)
+    # Verificar si ya existe un evento registrado para la pieza
+    existing_event = db.query(TraceEvent).filter(TraceEvent.part_id == event_in.part_id).first()
+    if existing_event:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Ya existe un evento registrado para esta pieza.",
+        )
 
-    # Opcional: actualizar status actual de la pieza
-    # part.status = event_in.status_nuevo
-    # db.add(part)
+    if event_in.resultado in {"OK", "SCRAP", "RETRABAJO"}:
+        part.status = event_in.resultado
+        db.add(part)
+
+    event = TraceEvent(**event_in.model_dump())  # Crear el evento de traza
+    db.add(event)
 
     db.commit()
     db.refresh(event)
@@ -48,10 +55,9 @@ def create_trace_event(
 
 
 # --------- Historial completo de una pieza (SUPERVISOR / ADMIN) ---------
-
 @router.get("/part/{part_id}", response_model=list[TraceEventOut])
 def list_trace_events_for_part(
-    part_id: str,
+    part_id: int,
     db: Session = Depends(get_db),
     current_user=Depends(require_supervisor_or_admin),
 ):

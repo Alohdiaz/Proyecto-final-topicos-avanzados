@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 class RiskInput(BaseModel):
-    part_id: str
+    part_id: int
     num_retrabajos: int
     tiempo_total_segundos: int
     estacion_actual: str

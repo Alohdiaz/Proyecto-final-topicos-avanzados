@@ -19,7 +19,6 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
 
 @router.post("/register", response_model=UserOut)
 def register(user_in: UserCreate, db: Session = Depends(get_db)):
-    # ¿Ya existe un usuario con ese email?
     existing = db.query(User).filter(User.email == user_in.email).first()
     if existing:
         raise HTTPException(
