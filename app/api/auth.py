@@ -11,7 +11,6 @@ from app.models.user import User
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
-# Este es el esquema OAuth2 que usarán los endpoints protegidos
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
 
 
@@ -19,7 +18,6 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
 
 @router.post("/register", response_model=UserOut)
 def register(user_in: UserCreate, db: Session = Depends(get_db)):
-    # ¿Ya existe un usuario con ese email?
     existing = db.query(User).filter(User.email == user_in.email).first()
     if existing:
         raise HTTPException(

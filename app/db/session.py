@@ -3,13 +3,11 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
 from app.core.config import settings
 
-# Crear el engine con la URL de la base de datos
 engine = create_engine(
     settings.DATABASE_URL,
     future=True,
 )
 
-# Factoría de sesiones
 SessionLocal = sessionmaker(
     autocommit=False,
     autoflush=False,

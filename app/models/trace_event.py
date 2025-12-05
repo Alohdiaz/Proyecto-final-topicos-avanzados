@@ -7,7 +7,7 @@ class TraceEvent(Base):
     __tablename__ = "trace_events"
 
     id = Column(Integer, primary_key=True, index=True)
-    part_id = Column(Integer, ForeignKey("parts.id"), nullable=False)
+    part_id = Column(Integer, ForeignKey("parts.id"), nullable=False) 
     station_id = Column(Integer, ForeignKey("stations.id"), nullable=False)
     operador_id = Column(Integer, ForeignKey("users.id"), nullable=True)
 
