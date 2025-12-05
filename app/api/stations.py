@@ -114,7 +114,6 @@ def delete_station(
 
     db.delete(station)
     db.commit()
-    # 204 → sin cuerpo de respuesta
     return None
 
 # ------------------ RUTA PRIVADA (CUALQUIER ROL) ------------------ #

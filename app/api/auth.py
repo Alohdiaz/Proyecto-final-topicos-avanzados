@@ -11,7 +11,6 @@ from app.models.user import User
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
-# Este es el esquema OAuth2 que usarán los endpoints protegidos
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
 
 

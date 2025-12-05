@@ -1,10 +1,8 @@
 from fastapi import FastAPI
 from app.db.base import Base
 from app.db.session import engine
-
 from app.api import auth, parts, stations, trace_events, metrics, ai, user
 
-# Crear tablas al inicio (para el proyecto escolar está bien; en algo serio usar Alembic)
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Trace API")

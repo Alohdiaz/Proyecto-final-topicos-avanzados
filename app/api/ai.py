@@ -9,7 +9,7 @@ from app.models.part import Part
 from app.models.station import Station
 from app.core.roles import require_supervisor_or_admin
 from app.schemas.trace_event import TraceEventCreate, TraceEventOut  
-from app.core.roles import require_user  # Asegúrate de importar correctamente
+from app.core.roles import require_user  
 
 
 router = APIRouter(prefix="/ai", tags=["ai"])
