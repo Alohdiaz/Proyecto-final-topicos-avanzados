@@ -1,4 +1,3 @@
-# app/api/trace_events.py
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from sqlalchemy import func
