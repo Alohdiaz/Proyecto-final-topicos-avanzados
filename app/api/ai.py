@@ -220,32 +220,19 @@ def create_trace_event(
     return event
 '''
 
-# app/api/ai.py
-
 from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from sqlalchemy import func
-from pydantic import BaseModel
 
-from app.db.session import get_db  # OJO: desde db.session, no desde app.api
-from app.schemas.ai import RiskInput, RiskOutput
+from app.db.session import get_db
+from app.schemas.ai import RiskInput, RiskOutput, PartRiskScore
 from app.models.trace_event import TraceEvent
 from app.models.part import Part
 from app.core.roles import require_supervisor_or_admin
 
 router = APIRouter(prefix="/ai", tags=["ai"])
-
-
-# ======================== MODELO DE RESPUESTA PARA /risk-score/{part_id} ========================
-class PartRiskScore(BaseModel):
-    part_id: int
-    tiempo_total: float
-    scrap_count: int
-    retrabajos: int
-    riesgo: float
-    razones: List[str]
 
 
 # ======================== RISK SCORE BASADO EN REGLAS (INPUT MANUAL) ========================
