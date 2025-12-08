@@ -1,4 +1,3 @@
-# app/schemas/trace_event.py
 from pydantic import BaseModel, ConfigDict, Field
 from datetime import datetime
 from typing import Optional

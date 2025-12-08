@@ -1,5 +1,3 @@
-# app/schemas/ai.py
-
 from pydantic import BaseModel
 from typing import List
 

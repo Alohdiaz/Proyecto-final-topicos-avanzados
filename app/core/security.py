@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from jose import jwt
-from passlib.hash import sha256_crypt  # <- YA NO bcrypt
+from passlib.hash import sha256_crypt  
 from app.core.config import settings
 
 
